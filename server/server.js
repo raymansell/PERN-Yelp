@@ -1,10 +1,12 @@
 require('dotenv').config();
+const cors = require('cors');
 const express = require('express');
 const restaurantsRoutes = require('./routes/restaurants');
 
 const app = express();
 
 // middleware
+app.use(cors({ origin: process.env.CLIENT_ORIGIN }));
 app.use(express.json());
 
 // routes

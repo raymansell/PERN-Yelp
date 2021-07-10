@@ -1,4 +1,33 @@
+import { useEffect } from 'react';
+import { useRestaurants } from '../context/RestaurantsContext';
+import RestaurantFinderAPI from '../apis/RestaurantFinderAPI';
+
 const RestaurantList = () => {
+  const { restaurants, setRestaurants } = useRestaurants();
+
+  useEffect(() => {
+    const fetchRestaurants = async () => {
+      try {
+        const response = await RestaurantFinderAPI.get('/');
+        setRestaurants(response.data.data.restaurants);
+      } catch (err) {
+        // consider adding error states in the future
+      }
+    };
+    fetchRestaurants();
+  }, [setRestaurants]);
+
+  const handleDelete = async (id) => {
+    try {
+      await RestaurantFinderAPI.delete(`/${id}`);
+      setRestaurants((prevRestaurants) =>
+        prevRestaurants.filter((r) => r.id !== id)
+      );
+    } catch (err) {
+      // consider adding error states in the future
+    }
+  };
+
   return (
     <table className='table table-hover table-dark'>
       <thead>
@@ -12,30 +41,26 @@ const RestaurantList = () => {
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>mcdonalds</td>
-          <td>New York</td>
-          <td>$$</td>
-          <td>Rating</td>
-          <td>
-            <button className='btn btn-warning'>Update</button>
-          </td>
-          <td>
-            <button className='btn btn-danger'>Delete</button>
-          </td>
-        </tr>
-        <tr>
-          <td>mcdonalds</td>
-          <td>New York</td>
-          <td>$$</td>
-          <td>Rating</td>
-          <td>
-            <button className='btn btn-warning'>Update</button>
-          </td>
-          <td>
-            <button className='btn btn-danger'>Delete</button>
-          </td>
-        </tr>
+        {restaurants.length > 0 &&
+          restaurants.map((r) => (
+            <tr key={r.id}>
+              <td>{r.name}</td>
+              <td>{r.location}</td>
+              <td>{'$'.repeat(r.price_range)}</td>
+              <td>reviews</td>
+              <td>
+                <button className='btn btn-warning'>Update</button>
+              </td>
+              <td>
+                <button
+                  className='btn btn-danger'
+                  onClick={() => handleDelete(r.id)}
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
       </tbody>
     </table>
   );
