@@ -20,7 +20,8 @@ const RestaurantList = () => {
     fetchRestaurants();
   }, [setRestaurants]);
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (e, id) => {
+    e.stopPropagation();
     try {
       await RestaurantFinderAPI.delete(`/${id}`);
       setRestaurants((prevRestaurants) =>
@@ -31,8 +32,13 @@ const RestaurantList = () => {
     }
   };
 
-  const handleUpdate = (id) => {
+  const handleUpdate = (e, id) => {
+    e.stopPropagation();
     history.push(`/restaurants/${id}/update`);
+  };
+
+  const handleRestaurantSelect = (id) => {
+    history.push(`/restaurants/${id}`);
   };
 
   return (
@@ -50,7 +56,7 @@ const RestaurantList = () => {
       <tbody>
         {restaurants.length > 0 &&
           restaurants.map((r) => (
-            <tr key={r.id}>
+            <tr key={r.id} onClick={() => handleRestaurantSelect(r.id)}>
               <td>{r.name}</td>
               <td>{r.location}</td>
               <td>{'$'.repeat(r.price_range)}</td>
@@ -58,7 +64,7 @@ const RestaurantList = () => {
               <td>
                 <button
                   className='btn btn-warning'
-                  onClick={() => handleUpdate(r.id)}
+                  onClick={(e) => handleUpdate(e, r.id)}
                 >
                   Update
                 </button>
@@ -66,7 +72,7 @@ const RestaurantList = () => {
               <td>
                 <button
                   className='btn btn-danger'
-                  onClick={() => handleDelete(r.id)}
+                  onClick={(e) => handleDelete(e, r.id)}
                 >
                   Delete
                 </button>

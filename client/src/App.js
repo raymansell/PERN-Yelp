@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Home from './screens/Home';
-import RestaurantDetail from './screens/RestaurantDetail';
+import RestaurantDetailScreen from './screens/RestaurantDetailScreen';
 import UpdateScreen from './screens/UpdateScreen';
 
 function App() {
@@ -12,7 +12,7 @@ function App() {
             <Home />
           </Route>
           <Route exact path='/restaurants/:id'>
-            <RestaurantDetail />
+            <RestaurantDetailScreen />
           </Route>
           <Route exact path='/restaurants/:id/update'>
             <UpdateScreen />
