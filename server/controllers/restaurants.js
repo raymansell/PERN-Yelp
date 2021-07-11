@@ -72,7 +72,6 @@ const updateRestaurant = async (req, res) => {
       'UPDATE restaurant SET name = $1, location = $2, price_range = $3 WHERE id = $4 RETURNING *',
       [name, location, price_range, id]
     );
-    console.log(updatedRestaurant);
     return res.status(200).json({
       success: true,
       data: {

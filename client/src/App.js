@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Home from './screens/Home';
 import RestaurantDetail from './screens/RestaurantDetail';
-import UpdateRestaurant from './screens/UpdateRestaurant';
+import UpdateScreen from './screens/UpdateScreen';
 
 function App() {
   return (
@@ -15,7 +15,7 @@ function App() {
             <RestaurantDetail />
           </Route>
           <Route exact path='/restaurants/:id/update'>
-            <UpdateRestaurant />
+            <UpdateScreen />
           </Route>
         </Switch>
       </Router>
