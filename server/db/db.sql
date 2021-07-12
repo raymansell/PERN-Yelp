@@ -7,4 +7,10 @@ CREATE TABLE restaurant (
   price_range INT NOT NULL CHECK(price_range >= 1 AND price_range <= 5)
 );
 
-INSERT INTO restaurant (name, location, price_range) VALUES ('wendys', 'denver', 3);
+CREATE TABLE review (
+  id BIGSERIAL NOT NULL PRIMARY KEY,
+  restaurant_id BIGINT NOT NULL REFERENCES restaurant (id),
+  name VARCHAR(50) NOT NULL,
+  content TEXT NOT NULL,
+  rating INT NOT NULL CHECK(rating >= 1 AND rating <=5)
+);
