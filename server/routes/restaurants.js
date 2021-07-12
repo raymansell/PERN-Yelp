@@ -5,6 +5,7 @@ const {
   createRestaurant,
   updateRestaurant,
   deleteRestaurant,
+  addReview,
 } = require('../controllers/restaurants');
 
 router.route('/').get(getRestaurants).post(createRestaurant);
@@ -13,5 +14,5 @@ router
   .get(getRestaurantById)
   .put(updateRestaurant)
   .delete(deleteRestaurant);
-
+router.route('/:id/addReview').post(addReview);
 module.exports = router;

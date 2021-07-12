@@ -112,10 +112,34 @@ const deleteRestaurant = async (req, res) => {
   }
 };
 
+// Add a review
+const addReview = async (req, res) => {
+  const { id } = req.params;
+  const { name, content, rating } = req.body;
+  try {
+    const newReview = await pool.query(
+      'INSERT INTO review (restaurant_id, name, content, rating) VALUES ($1, $2, $3, $4) RETURNING *',
+      [id, name, content, rating]
+    );
+    return res.status(201).json({
+      success: true,
+      data: {
+        review: newReview.rows[0],
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: 'Server error',
+    });
+  }
+};
+
 module.exports = {
   getRestaurants,
   getRestaurantById,
   createRestaurant,
   updateRestaurant,
   deleteRestaurant,
+  addReview,
 };
