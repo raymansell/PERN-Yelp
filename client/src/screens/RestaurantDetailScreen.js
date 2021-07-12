@@ -8,12 +8,14 @@ import AddReview from '../components/AddReview';
 const RestaurantDetailScreen = () => {
   const { id } = useParams();
   const [restaurant, setRestaurant] = useState(null);
+  const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
     const fetchRestaurant = async () => {
       try {
         const response = await RestaurantFinderAPI.get(`/${id}`);
         setRestaurant(response.data.data.restaurant);
+        setReviews(response.data.data.reviews);
       } catch (error) {
         // consider adding error states in the future
       }
@@ -31,7 +33,7 @@ const RestaurantDetailScreen = () => {
             <StarRating rating={4} />
           </div>
           <div className='mt-3'>
-            <Reviews />
+            <Reviews reviews={reviews} />
           </div>
           <AddReview />
         </>

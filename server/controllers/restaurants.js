@@ -23,14 +23,23 @@ const getRestaurants = async (req, res) => {
 const getRestaurantById = async (req, res) => {
   const { id } = req.params;
   try {
-    const restaurant = await pool.query(
+    const restaurantPromise = pool.query(
       'SELECT * FROM restaurant WHERE id = $1',
       [id]
     );
+    const reviewsPromise = pool.query(
+      'SELECT * FROM review WHERE restaurant_id = $1',
+      [id]
+    );
+    const [restaurant, reviews] = await Promise.all([
+      restaurantPromise,
+      reviewsPromise,
+    ]);
     return res.status(200).json({
       success: true,
       data: {
         restaurant: restaurant.rows[0],
+        reviews: reviews.rows,
       },
     });
   } catch (error) {
