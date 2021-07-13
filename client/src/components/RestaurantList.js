@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useRestaurants } from '../context/RestaurantsContext';
 import RestaurantFinderAPI from '../apis/RestaurantFinderAPI';
+import StarRating from './StarRating';
 
 const RestaurantList = () => {
   const { restaurants, setRestaurants } = useRestaurants();
@@ -60,7 +61,18 @@ const RestaurantList = () => {
               <td>{r.name}</td>
               <td>{r.location}</td>
               <td>{'$'.repeat(r.price_range)}</td>
-              <td>reviews</td>
+              <td>
+                {r.total_reviews > 0 ? (
+                  <>
+                    <StarRating rating={r.average_rating} />
+                    <span className='text-warning ms-1'>
+                      ({r.total_reviews})
+                    </span>
+                  </>
+                ) : (
+                  <span className='text-warning ms-1'>0 reviews</span>
+                )}
+              </td>
               <td>
                 <button
                   className='btn btn-warning'

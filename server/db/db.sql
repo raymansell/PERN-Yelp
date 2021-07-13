@@ -9,7 +9,7 @@ CREATE TABLE restaurant (
 
 CREATE TABLE review (
   id BIGSERIAL NOT NULL PRIMARY KEY,
-  restaurant_id BIGINT NOT NULL REFERENCES restaurant (id),
+  restaurant_id BIGINT NOT NULL REFERENCES restaurant (id) ON DELETE CASCADE,
   name VARCHAR(50) NOT NULL,
   content TEXT NOT NULL,
   rating INT NOT NULL CHECK(rating >= 1 AND rating <=5)

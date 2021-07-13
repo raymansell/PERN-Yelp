@@ -3,7 +3,9 @@ const pool = require('../db/db');
 // Get all restaurants
 const getRestaurants = async (req, res) => {
   try {
-    const restaurants = await pool.query('SELECT * FROM restaurant');
+    const restaurants = await pool.query(
+      'SELECT id, name, location, price_range, COUNT(rating)::int AS total_reviews, TRUNC(AVG(rating),2)::real AS average_rating FROM restaurant LEFT JOIN (SELECT restaurant_id, rating FROM review) AS review ON review.restaurant_id = restaurant.id GROUP BY (restaurant.id)'
+    );
     return res.status(200).json({
       success: true,
       results: restaurants.rows.length,
@@ -24,7 +26,7 @@ const getRestaurantById = async (req, res) => {
   const { id } = req.params;
   try {
     const restaurantPromise = pool.query(
-      'SELECT * FROM restaurant WHERE id = $1',
+      'SELECT id, name, location, price_range, COUNT(rating)::int AS total_reviews, TRUNC(AVG(rating),2)::real AS average_rating FROM restaurant LEFT JOIN (SELECT restaurant_id, rating FROM review) AS review ON review.restaurant_id = restaurant.id GROUP BY (restaurant.id) HAVING restaurant.id = $1',
       [id]
     );
     const reviewsPromise = pool.query(

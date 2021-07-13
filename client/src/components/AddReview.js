@@ -1,7 +1,15 @@
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import RestaurantFinderAPI from '../apis/RestaurantFinderAPI';
 
-const AddReview = () => {
-  const [fields, setFields] = useState({ name: '', rating: '', content: '' });
+const AddReview = ({ refetchRestaurant }) => {
+  const [fields, setFields] = useState({
+    name: '',
+    rating: 'Rating',
+    content: '',
+  });
+  const { id } = useParams();
+
   const handleChange = (e) => {
     setFields((prevFields) => ({
       ...prevFields,
@@ -9,8 +17,18 @@ const AddReview = () => {
     }));
   };
 
+  const handleSubmitReview = async (e) => {
+    e.preventDefault();
+    await RestaurantFinderAPI.post(`/${id}/addReview`, {
+      name: fields.name,
+      content: fields.content,
+      rating: fields.rating,
+    });
+    refetchRestaurant(); // refetching bc now we need to take into account this review to update the avg rating from RestaurantDetailScreen
+  };
+
   return (
-    <form className='row g-3'>
+    <form className='row g-3' onSubmit={handleSubmitReview}>
       <div className='col-8'>
         <label htmlFor='name' className='form-label'>
           Name
